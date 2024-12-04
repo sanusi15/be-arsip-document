@@ -1,0 +1,93 @@
+[{
+  "_id": {
+    "$oid": "674580737d76ba1f9e749175"
+  },
+  "parentId": null,
+  "folderName": "MINARTA",
+  "path": "/",
+  "pathShow": "/MINARTA",
+  "property": {
+    "type": "folder",
+    "size": 1024,
+    "created_at": "2024-12-01 10:10:21"
+  },
+  "userAccess": [
+    {
+      "user_id": 1,
+      "access": [
+        "read",
+        "write",
+        "delete"
+      ]
+    },
+    {
+      "user_id": 2,
+      "access": [
+        "read",
+        "write"
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "674580ce7d76ba1f9e749176"
+  },
+  "parentId": null,
+  "folderName": "KELMAN INFRA PRATAMA",
+  "path": "/",
+  "pathShow": "/KELMAN INFRA PRATAMA",
+  "property": {
+    "type": "folder",
+    "size": 1024,
+    "created_at": "2024-12-01 10:10:21"
+  },
+  "userAccess": [
+    {
+      "user_id": 1,
+      "access": [
+        "read",
+        "write",
+        "delete"
+      ]
+    },
+    {
+      "user_id": 2,
+      "access": [
+        "read",
+        "write"
+      ]
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "674581907d76ba1f9e749179"
+  },
+  "parentId": "674580737d76ba1f9e749175",
+  "folderName": "Arsip MINARTA",
+  "path": "/MINARTA",
+  "pathShow": "/MINARTA/Arsip MINARTA",
+  "property": {
+    "type": "folder",
+    "size": 1024,
+    "created_at": "2024-12-01 10:10:21"
+  },
+  "userAccess": [
+    {
+      "user_id": 1,
+      "access": [
+        "read",
+        "write",
+        "delete"
+      ]
+    },
+    {
+      "user_id": 2,
+      "access": [
+        "read",
+        "write"
+      ]
+    }
+  ]
+}]

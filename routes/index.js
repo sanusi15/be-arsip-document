@@ -11,6 +11,6 @@ const upload = require("../middleware/multer");
 router.get("/folders", getFolder);
 router.get("/getContentsByFolderId", getFileAndFolderByFolderId);
 router.get("/getContentsByPath", getFileAndFolderByPath);
-router.post("/upload", upload.array("file"), uploadPDF);
+router.post("/upload", upload.single("file"), uploadPDF);
 
 module.exports = router;

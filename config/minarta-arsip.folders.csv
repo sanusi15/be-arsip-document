@@ -1,0 +1,4 @@
+_id,parentId,folderName,path,pathShow,property.type,property.size,property.created_at,userAccess[0].user_id,userAccess[1].user_id,userAccess[0].access[0],userAccess[0].access[1],userAccess[0].access[2],userAccess[1].access[0],userAccess[1].access[1]
+674580737d76ba1f9e749175,,MINARTA,/,/MINARTA,folder,1024,2024-12-01 10:10:21,1,2,read,write,delete,read,write
+674580ce7d76ba1f9e749176,,KELMAN INFRA PRATAMA,/,/KELMAN INFRA PRATAMA,folder,1024,2024-12-01 10:10:21,1,2,read,write,delete,read,write
+674581907d76ba1f9e749179,674580737d76ba1f9e749175,Arsip MINARTA,/MINARTA,/MINARTA/Arsip MINARTA,folder,1024,2024-12-01 10:10:21,1,2,read,write,delete,read,write

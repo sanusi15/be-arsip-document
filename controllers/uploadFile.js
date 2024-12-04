@@ -1,3 +1,8 @@
+require("dotenv").config();
+const cloud_name = process.env.CLOUD_NAME;
+const api_key = process.env.API_KEY;
+const api_secret = process.env.API_SECRET;
+
 const cloudinary = require("cloudinary").v2;
 const { response } = require("express");
 const fs = require("fs");
@@ -6,22 +11,22 @@ const path = require("path");
 const { insertFile } = require("../models/fileModel");
 
 cloudinary.config({
-  cloud_name: "dtfy2c2eg",
-  api_key: "365169621411617",
-  api_secret: "SrezEt-qb9zcS_NUGk1qAqD6ta0"
+  cloud_name: cloud_name,
+  api_key: api_key,
+  api_secret: api_secret
 });
 
 const uploadPDF = async (req, res) => {
-  console.log(req.file);
+  const filename = req.file.originalname.split(".");
+  const mimetype = filename[filename.length - 1];
+  const { path, pathId } = req.body;
   const dataFile = {
-    name: "Arsip Rahasia.docx",
-    size: 1214,
-    type: "docx",
-    path: "/MINARTA/Arsip Minarta",
-    pathId: "674581907d76ba1f9e749179",
-    createdAt: {
-      $date: "2024-11-20T11:00:00.000Z"
-    },
+    name: req.file.originalname,
+    size: req.file.size,
+    type: mimetype,
+    path: path,
+    pathId: pathId,
+    createdAt: "2024-11-20T11:00:00.000Z",
     createdBy: "user123",
     tags: ["report", "finance"],
     permissions: [
