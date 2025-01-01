@@ -1,37 +1,29 @@
-const connect = require("../config/database");
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
 
-const fileSchema = new Schema({
-  name: String,
-  size: Number,
-  type: String,
-  path: String,
-  pathId: String,
-  createdAt: Date,
-  createdBy: String,
-  tags: [String],
-  permissions: [
-    {
-      userId: String,
-      accessType: [String]
+const fileSchema = new mongoose.Schema({
+    title: {
+        type: String,
+        required: [true, 'Title File is Required ']
+    },
+    size: {
+        type: Number,
+        required: [true, 'Size File is Required']
+    },
+    fileExt: {
+        type: String,
+        required: [true, 'Extension File is Required']
+    },
+    routePath: {
+        type: String,
+        required: [true, 'Path File is Required']
+    },
+    parentPath: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Folders'
+    },
+    tags: {
+        type: Array
     }
-  ]
-});
+}, {timestamps: true})
 
-const insertFile = async function (data) {
-  const db = await connect();
-  return db.collection("files").insertOne(data);
-};
-
-const getFileByFolderId = async function (folderId = null) {
-  const db = await connect();
-  return db.collection("files").find({ pathId: folderId }).toArray();
-};
-
-const getFileByPath = async function (path = null) {
-  const db = await connect();
-  return db.collection("files").find({ path: path }).toArray();
-};
-
-module.exports = { insertFile, getFileByFolderId, getFileByPath };
+module.exports =  mongoose.model('Files', fileSchema)

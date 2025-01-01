@@ -1,22 +1,33 @@
-const connect = require("../config/database");
+const mongoose = require('mongoose');
 
-const insertFolder = async function (data) {
-  const db = await connect();
-  return db.collection("folders").insertOne(data);
-};
+const folderSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'Folder Name is Required']
+  },
+  parentPath: {
+    type: String,
+    default: null
+  },
+  routePath: {
+    type: String,
+    required: [true, 'Folder Route is Required'],
+    default: '/',
+  },
+  slugPath: {
+    type: String,
+    required: [true, 'Folder Slug is Required'],
+  },
+  typeExt: {
+    type: String,
+    default: 'folder'
+  },
+  userAccess: [
+        {
+            userId: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+            accessType: { type: [String], required: true } 
+        }
+    ]
+}, {timestamps: true})
 
-const getFolderByFolderId = async function (folderId = null) {
-  const db = await connect();
-  return db.collection("folders").find({ parentId: folderId }).toArray();
-};
-
-const getFolderByPath = async function (path = null) {
-  const db = await connect();
-  return db.collection("folders").find({ path: path }).toArray();
-};
-
-module.exports = {
-  insertFolder,
-  getFolderByFolderId,
-  getFolderByPath
-};
+module.exports = mongoose.model('Folders', folderSchema)
