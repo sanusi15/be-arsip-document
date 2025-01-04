@@ -23,7 +23,23 @@ const fileSchema = new mongoose.Schema({
     },
     tags: {
         type: Array
+    },
+    dataCloud: {
+        asset_id: {
+            type: String
+        },
+        public_id: {
+            type: String,
+        },
+        url: {
+            type: String,
+        },
+        secureUrl: {
+            type: String,
+        },
     }
+    
+    
 }, {timestamps: true})
 
 module.exports =  mongoose.model('Files', fileSchema)

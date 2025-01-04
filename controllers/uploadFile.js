@@ -27,13 +27,13 @@ const dateTime = () => {
 const uploadPDF = async (req, res) => {
   const filename = req.file.originalname.split(".");
   const mimetype = filename[filename.length - 1];
-  const { path, pathId } = req.body;
+  const { routePath, id } = req.body;
   const dataFile = {
     name: req.file.originalname,
     size: req.file.size,
     type: mimetype,
-    path: path,
-    pathId: pathId,
+    path: routePath,
+    pathId: id,
     createdAt: dateTime(),
     createdBy: "user123",
     tags: ["report", "finance"],
@@ -48,6 +48,10 @@ const uploadPDF = async (req, res) => {
       }
     ]
   };
+
+  console.log(dataFile)
+  return false
+
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded." });
