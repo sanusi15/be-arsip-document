@@ -64,7 +64,7 @@ const getFolderByParentPathController = async (req, res) => {
         message: 'Please Provide Parent Path ID'
       })
     }
-    const folders = await folderModel.find({parentPath})
+    const folders = await folderModel.find({parentPath}).sort({name: 1})
     if(!folders){
       return res.status(404).send({
         success: false,
@@ -90,7 +90,7 @@ const getFolderBySlugController = async (req, res) => {
   try {
     const {path} = req.body
     const convertToSlag = path.replaceAll(' ', '_').toLowerCase()
-    const isExists = await folderModel.findOne({slugPath: convertToSlag})
+    const isExists = await folderModel.findOne({slugPath: convertToSlag}).sort({name: 1})
     if(!isExists){
       return res.status(404).send({
         success: false,
@@ -98,20 +98,10 @@ const getFolderBySlugController = async (req, res) => {
       })
     }else{
       return res.status(200).send({
+        success: true,
         data: isExists
       })
     }
-    // if(!path){
-    //   return res.status(500).send({
-    //     success: false,
-    //     message: 'Please Provide Path Folder'
-    //   })
-    // }
-    // const folders = await folderModel.find({routePath: path.toLowerCase()})
-    // res.status(200).send({
-    //   success: true,
-    //   data: folders
-    // })
   } catch (error) {
     console.log(error)
     res.status(500).send({
@@ -122,4 +112,47 @@ const getFolderBySlugController = async (req, res) => {
   }
 }
 
-module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController };
+const updateFolderNameController = async (req, res) => {
+  try {
+    const folderId = req.params.id
+    const {newName, userAccess } = req.body
+    const folder = await folderModel.findById(folderId)
+    if(!folder){
+      return res.status(404).send({
+        success: false,
+        message: 'Data Not Found'
+      })
+    }
+    const oldRoutePath = folder.routePath
+    const oldSlugPath = folder.slugPath
+    const newRoutePath = oldRoutePath.replace(folder.name, newName)
+    const newSlugPath = oldSlugPath.replace(folder.name.toLowerCase().replace(/\s+/g, "_"), newName.toLowerCase().replace(/\s+/g, "_"))
+    await folderModel.findByIdAndUpdate(folderId, {
+      name: newName,
+      routePath: newRoutePath,
+      slugPath: newSlugPath
+    })
+    const childFolders = await folderModel.find({routePath: {$regex: `^${oldRoutePath}`}});
+    for(const child of childFolders){
+      const updatedRoutePath = child.routePath.replace(oldRoutePath, newRoutePath)
+      const updatedSlugPath = child.slugPath.replace(oldSlugPath, newSlugPath);
+      await folderModel.findByIdAndUpdate(child._id, {
+        routePath: updatedRoutePath,
+        slugPath: updatedSlugPath,
+      });
+    }
+    res.send({
+      success: true,
+      message: "Folder Name Updated"
+    })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success: true,
+      message: 'Error in Update Folder API',
+      error
+    })
+  }
+}
+
+module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController, updateFolderNameController };

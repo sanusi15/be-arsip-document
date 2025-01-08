@@ -1,3 +1,4 @@
 node_modules
 * text=auto
 *.json text eol=lf
+arsip-document.folders.json

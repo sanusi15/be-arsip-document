@@ -15,7 +15,7 @@ const getBySlugController = async (req, res) => {
             })
         }
         const pathId = folder._id
-        const getFolder = await folderModel.find({parentPath: pathId}).sort({name: -1})
+        const getFolder = await folderModel.find({parentPath: pathId}).sort({name: 1})
         const getFile = await fileModel.find({parentPath: pathId}).sort({title: 1})
         res.status(200).send({
             success: true,
