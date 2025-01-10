@@ -141,7 +141,7 @@ const updateFolderNameController = async (req, res) => {
         slugPath: updatedSlugPath,
       });
     }
-    res.send({
+    res.status(200).send({
       success: true,
       message: "Folder Name Updated"
     })
@@ -155,4 +155,69 @@ const updateFolderNameController = async (req, res) => {
   }
 }
 
-module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController, updateFolderNameController };
+const cutFolderController = async (req, res) => {
+  try {
+    const folderId = req.params.id
+    const {newParentFolderId} = req.body
+    const folder = await folderModel.findById(folderId)
+    if(!folder){
+      return res.status(404).send({
+        success: false,
+        message: 'Folder Not Found',
+      })
+    }
+    // get parent folder target
+    const oldParentFolders = await folderModel.findById(folder.parentPath)
+    if(!oldParentFolders){
+      return res.status(404).send({
+        success: false,
+        message: 'Old Parent Folder Not Found'
+      })
+    }
+    const oldParentFoldersRoutePath = oldParentFolders.routePath
+    const oldParentFoldersSlugPath = oldParentFolders.slugPath
+
+    
+    if(folder.parentPath !== null){
+      // get new parent folder target
+      const newParentFolder = await folderModel.findById(newParentFolderId)
+      if(!newParentFolder){
+        return res.status(404).send({
+          success: false,
+          message: 'Folder Destination Not Found',
+        })
+      }
+      const newParentFolderRoutePath = newParentFolder.routePath
+      const newParentFolderSlugPath = newParentFolder.slugPath
+      // update folder target
+      await folderModel.findByIdAndUpdate(folderId, {
+        parentPath: newParentFolderId,
+        routePath: newParentFolderRoutePath,
+        slugPath: newParentFolderSlugPath
+      })
+      // get child folder target then update the routePath and slugPath
+      const childFolders = await folderModel.find({routePath: {$regex: `${folder.routePath}`}})
+      for(const child of childFolders){
+        const updatedRoutePath = child.routePath.replace(oldParentFoldersRoutePath, newParentFolderRoutePath)
+        const updatedSlugPath = child.slugPath.replace(oldParentFoldersSlugPath, newParentFolderSlugPath)
+        await folderModel.findByIdAndUpdate(child._id, {
+          routePath: updatedRoutePath,
+          slugPath: updatedSlugPath
+        })
+      }
+      res.status(200).send({
+        success: true,
+        message: "Cut Folder Success"
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success: false,
+      message: 'Error in Cut Folder Controller',
+      error
+    })
+  }
+}
+
+module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController, updateFolderNameController, cutFolderController };

@@ -95,6 +95,6 @@ const uploadFileController = async (req, res) => {
       console.log(error);
       return res.status(500).send({ error: "Failed to upload file." });
     }
-  };
+};
 
 module.exports = {getBySlugController, uploadFileController}
