@@ -14,17 +14,16 @@ const cloudinaryUpload = async (req, res) => {
     try {
         const filePath = "./uploads/" + req.fileName;
         const fileName = req.originalName;
-        const path = req.routePath
         if (["jpg", "jpeg", "png", "gif"].includes(req.mimeType)) {
             const upload = await cloudinary.uploader.upload(filePath, {
             public_id: fileName,
-            folder: "sistem_arsip/" + path
+            folder: "sistem_arsip/"
             });
             return upload
         } else {
             const upload = await cloudinary.uploader.upload(filePath, {
             public_id: fileName,
-            folder: "sistem_arsip/" + path,
+            folder: "sistem_arsip/",
             resource_type: "raw"
             });
             return upload

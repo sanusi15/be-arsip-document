@@ -2,8 +2,8 @@ const fileModel = require('../models/fileModel')
 
 const createFileController = async (req, res) => {
     try {
-        const {title, size, fileExt, routePath, parentPath, tags, permissons} = req.body
-        const newFile = await fileModel.create({title, size, fileExt, routePath, parentPath, tags, permissons})
+        const {title, size, fileExt, parentPath, tags, permissons} = req.body
+        const newFile = await fileModel.create({title, size, fileExt, parentPath, tags, permissons})
         if(!newFile){
             return res.status(500).send({
                 success: false,

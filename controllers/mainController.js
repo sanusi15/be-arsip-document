@@ -43,8 +43,8 @@ const uploadFileController = async (req, res) => {
                 message: "Please Provide File"
             })
         }
-        const { routePath, id } = req.body;
-        if(!routePath || !id){
+        const { id } = req.body;
+        if(!id){
             return res.status(400).send({
                 success: false,
                 message: "Please Choose a Directory"
@@ -58,14 +58,12 @@ const uploadFileController = async (req, res) => {
                     size: val.size,
                     fileExt: splitNameExt[splitNameExt.length - 1],
                     parentPath: id,
-                    routePath: routePath,
                     tags: ['file', 'index'],
                 };
                 const cloudUplod = await cloudinaryUpload({
                     fileName: val.filename,
                     originalName: val.originalname,
                     mimeType: splitNameExt[splitNameExt.length - 1],
-                    routePath
                 });
                 try {
                     await fs.promises.unlink('./uploads/' + val.filename);

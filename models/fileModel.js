@@ -13,10 +13,6 @@ const fileSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Extension File is Required']
     },
-    routePath: {
-        type: String,
-        required: [true, 'Path File is Required']
-    },
     parentPath: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Folders'
