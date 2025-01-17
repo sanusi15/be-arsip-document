@@ -177,7 +177,6 @@ const cutFolderController = async (req, res) => {
     const oldParentFoldersRoutePath = oldParentFolders.routePath
     const oldParentFoldersSlugPath = oldParentFolders.slugPath
 
-    
     if(folder.parentPath !== null){
       // get new parent folder target
       const newParentFolder = await folderModel.findById(newParentFolderId)
@@ -192,8 +191,8 @@ const cutFolderController = async (req, res) => {
       // update folder target
       await folderModel.findByIdAndUpdate(folderId, {
         parentPath: newParentFolderId,
-        routePath: newParentFolderRoutePath,
-        slugPath: newParentFolderSlugPath
+        routePath: newParentFolderRoutePath + '/' + folder.name,
+        slugPath: newParentFolderSlugPath + '/' + folder.name.toLowerCase().replace(/\s+/g, "_")
       })
       // get child folder target then update the routePath and slugPath
       const childFolders = await folderModel.find({routePath: {$regex: `${folder.routePath}`}})
