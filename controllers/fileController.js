@@ -1,4 +1,5 @@
 const fileModel = require('../models/fileModel')
+const folderModel = require('../models/folderModel')
 
 const createFileController = async (req, res) => {
     try {
@@ -73,4 +74,39 @@ const getFileByPathController = async (req, res) => {
     }
 }
 
-module.exports = {createFileController, getFileByParentPathController, getFileByPathController}
+const cutFileController = async (req, res) => {
+    try {
+        const fileId = req.params.id
+        const {newParentFolderId} = req.body
+        const file = await fileModel.findById(fileId)
+        if(!file){
+            return res.status(404).send({
+                success: false,
+                message: 'File Not Found'
+            })
+        }
+        const folder = await folderModel.findById(newParentFolderId)
+        if(!folder){
+            return res.status(404).send({
+                success: false,
+                message: 'Folder Not Found'
+            })
+        }
+        await fileModel.findByIdAndUpdate(fileId, {
+            parentPath: newParentFolderId
+        })
+        res.status(200).send({
+            success: true,
+            message: 'File Has Been Moved'
+        })
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            success: false,
+            message: 'Error in Cut File API',
+            error
+        })
+    }
+}
+
+module.exports = {createFileController, getFileByParentPathController, getFileByPathController, cutFileController}
