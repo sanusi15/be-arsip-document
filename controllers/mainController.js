@@ -3,6 +3,11 @@ const folderModel = require("../models/folderModel")
 const fileModel = require('../models/fileModel');
 const { cloudinaryUpload } = require("../middleware/cloudinary");
 
+const convertBytesToKiloBytes = (size) => {
+    const res = (size / 1024).toFixed(2)
+    return res    
+}
+
 const getBySlugController = async (req, res) => {
     try {
         const {path} = req.body
@@ -55,7 +60,7 @@ const uploadFileController = async (req, res) => {
                 const splitNameExt = val.originalname.split(".");
                 const data = {
                     title: splitNameExt[0],
-                    size: val.size,
+                    size: convertBytesToKiloBytes(val.size),
                     fileExt: splitNameExt[splitNameExt.length - 1],
                     parentPath: id,
                     tags: ['file', 'index'],

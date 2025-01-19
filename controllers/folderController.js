@@ -213,7 +213,7 @@ const cutFolderController = async (req, res) => {
     console.log(error)
     res.status(500).send({
       success: false,
-      message: 'Error in Cut Folder Controller',
+      message: 'Error in Cut Folder API',
       error
     })
   }
