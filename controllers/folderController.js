@@ -219,4 +219,31 @@ const cutFolderController = async (req, res) => {
   }
 }
 
-module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController, updateFolderNameController, cutFolderController };
+const copyFolderController = async (req, res) => {
+  try {
+    const folderId = req.params.id
+    const {newParentFolderId} = req.body
+    const folder = await folderModel.findById(folderId)
+    if(!folder){
+      return res.status(404).send({
+        success: false,
+        message: 'Folder not found, please check again'
+      })
+    }
+    const parentFolder = await folderModel.findById(newParentFolderId)
+    if(!parentFolder){
+      return res.status(404).send({
+        success: false,
+        message: 'Folder destination not found, please check again'
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({
+      success: false,
+      message: 'Error in Copy Folder API'
+    })
+  }
+}
+
+module.exports = { createFolderController, getParentFolderController, getFolderByParentPathController, getFolderBySlugController, updateFolderNameController, cutFolderController, copyFolderController };

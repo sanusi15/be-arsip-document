@@ -1,7 +1,7 @@
 const fs = require("fs");
 const folderModel = require("../models/folderModel")
 const fileModel = require('../models/fileModel');
-const { cloudinaryUpload } = require("../middleware/cloudinary");
+const { cloudinaryUpload } = require("../services/cloudinary");
 
 const convertBytesToKiloBytes = (size) => {
     const res = (size / 1024).toFixed(2)
